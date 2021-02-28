@@ -222,11 +222,12 @@ namespace MyLibrary
             var openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Datový súbor(*.xml)|*.xml";
             openFileDialog.ShowDialog();
-            if (!openFileDialog.CheckFileExists)
+            if (openFileDialog.FileName != "")
             {
                 UsersSnapshot.LoadXmlStreamSnapshot(openFileDialog.FileName);
                 UsersSnapshot.GetUsers();
             }
+            RefreshBookTables();
         }
 
         private void btnBookAdd_Click(object sender, EventArgs e)
@@ -272,7 +273,7 @@ namespace MyLibrary
             var openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Datový súbor knižnice(*.xml)|*.xml";
             openFileDialog.ShowDialog();
-            if (!openFileDialog.CheckFileExists)
+            if (openFileDialog.FileName!="")
             {
                 LibrarySnapshot.LoadSnapshot(openFileDialog.FileName);
                 RefreshBookTables();
@@ -291,6 +292,30 @@ namespace MyLibrary
 
             LibrarySnapshot.RemoveBooksFromSnapshot(idsToRemove);
             RefreshBookTables();
+        }
+
+        private void btnReserveBook_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow row in gvAvailBooks.SelectedRows)
+            {
+                int id = Convert.ToInt32(row.Cells["Id"].Value);
+                LibrarySnapshot.BorrowBook(id, CurrentUser);
+            }
+
+            RefreshBookTables();
+
+        }
+
+        private void btnReturnBook_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow row in gvMyBooks.SelectedRows)
+            {
+                int id = Convert.ToInt32(row.Cells["Id"].Value);
+                LibrarySnapshot.ReturnBook(id);
+            }
+            RefreshBookTables();
+
+
         }
     }
 }

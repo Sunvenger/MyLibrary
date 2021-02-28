@@ -50,6 +50,23 @@ namespace MyLibrary.DataLayer
 
         }
 
+        internal void BorrowBook(int bookId, string firstName, string lastName, DateTime now)
+        {
+
+            cBook bookToAssign = (from book in Books where book.Id == bookId select book).First();
+            
+            if(bookToAssign.Borrowed == null)
+            {
+                bookToAssign.Borrowed = new cBorrowed(); 
+            }
+            bookToAssign.Borrowed.FirstName = firstName;
+            bookToAssign.Borrowed.LastName = lastName;
+            bookToAssign.Borrowed.From = now.ToString();
+            UpdateSnapshotFromDataLayer();
+
+
+        }
+
         internal void RemoveBook(int id)
         {
 
@@ -57,6 +74,11 @@ namespace MyLibrary.DataLayer
                                        where b.Id != id
                                        select b).ToList(); // construct new lists without original
             Books = newBookList; // replacing original Books container
+            UpdateSnapshotFromDataLayer();
+        }
+
+        private void UpdateSnapshotFromDataLayer()
+        {
             var overrides = new XmlAttributeOverrides();
             var attributes = new XmlAttributes();
             attributes.XmlIgnore = true;
@@ -136,6 +158,16 @@ namespace MyLibrary.DataLayer
             {
                 return null;
             }
+        }
+
+        internal void ReturnBook(int id)
+        {
+            cBook BookToReturn = (from b in Books
+                                where b.Id == id
+                                select b).First();
+            BookToReturn.Borrowed = null;
+            UpdateSnapshotFromDataLayer();
+
         }
 
         internal void RemoveBooks(List<int> idsToRemove)

@@ -12,6 +12,7 @@ namespace MyLibrary.PresentationLayer
         public String Názov { get; set; }
         public String Autor { get; set; }
         public String Požičané  { get; set; }
+        public String PožičanéOd { get; set; }
         public User owner;
         public static List<pBook> GetBooks(Library lib, Users users)
         {
@@ -35,9 +36,10 @@ namespace MyLibrary.PresentationLayer
                         Názov = book.Name,
                         Autor = book.Author,
                         Požičané = požičané,
-                        owner = book.Borrowed
+                        owner = book.Borrowed,
+                        PožičanéOd = book.BorrowedFrom.ToString(),
                     }
-                );
+                ) ;
             }
             return result;
 

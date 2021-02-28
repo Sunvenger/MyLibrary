@@ -37,6 +37,12 @@ namespace MyLibrary.AppLayer
 
             library.RemoveBook(bookToRemove.Id);
         }
+        public void BorrowBook(int bookId, User userToAssign) 
+        {
+
+            library.BorrowBook(bookId, userToAssign.FirstName, userToAssign.LastName, DateTime.Now);
+        }
+
 
         public void RemoveBookFromSnapshot(int bookToRemoveId)
         {
@@ -52,9 +58,19 @@ namespace MyLibrary.AppLayer
             foreach (cBook book in library.Books)
             {
                 User borrowed = null;
+                DateTime? borrowedFrom = null;
                 if (book.Borrowed != null)
                 {
                      borrowed = users.GetUserByName(book.Borrowed.FirstName, book.Borrowed.LastName);
+                    try
+                    { 
+                        borrowedFrom = DateTime.Parse(book.Borrowed.From);
+                    }
+                    catch
+                    {
+                        borrowedFrom = null;
+
+                    }
                 }
 
                 if (borrowed != null)
@@ -71,6 +87,7 @@ namespace MyLibrary.AppLayer
                             Login = borrowed.Login,
                             PasswordPrivate = borrowed.PasswordPrivate
                         },
+                        BorrowedFrom = borrowedFrom,
                         Id = book.Id
                     });
                 }
@@ -132,6 +149,12 @@ namespace MyLibrary.AppLayer
         internal void RemoveBooksFromSnapshot(List<int> idsToRemove)
         {
             library.RemoveBooks(idsToRemove);
+        }
+
+        internal void ReturnBook(int id)
+        {
+            library.ReturnBook(id);
+
         }
     }
 }

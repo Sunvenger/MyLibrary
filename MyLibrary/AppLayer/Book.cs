@@ -30,8 +30,7 @@ namespace MyLibrary.AppLayer
                         FirstName = book.Borrowed.FirstName,
                         LastName = book.Borrowed.LastName,
                     },
-
-                    Id = book.Id
+                    Id = book.Id,
                 };
                 try
                 {

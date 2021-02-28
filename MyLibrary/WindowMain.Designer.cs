@@ -38,8 +38,13 @@ namespace MyLibrary
             this.gvAvailBooks = new System.Windows.Forms.DataGridView();
             this.tabMyBooks = new System.Windows.Forms.TabPage();
             this.gvMyBooks = new System.Windows.Forms.DataGridView();
-            this.tabCreateBook = new System.Windows.Forms.TabPage();
             this.btnReturnBook = new System.Windows.Forms.Button();
+            this.tabCreateBook = new System.Windows.Forms.TabPage();
+            this.btnBookAdd = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.tbAuthor = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.tbBookName = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.btnLogOut = new System.Windows.Forms.Button();
             this.btnGetStream = new System.Windows.Forms.Button();
@@ -47,14 +52,10 @@ namespace MyLibrary
             this.súborToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuBtnUsrExport = new System.Windows.Forms.ToolStripMenuItem();
             this.menuBtnImport = new System.Windows.Forms.ToolStripMenuItem();
+            this.menubtnExportLib = new System.Windows.Forms.ToolStripMenuItem();
+            this.manuBtnImportLib = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.exportKnižniceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.importKnižniceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tbBookName = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.tbAuthor = new System.Windows.Forms.TextBox();
-            this.btnBookAdd = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabAllBooks.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gvAllBooks)).BeginInit();
@@ -80,6 +81,7 @@ namespace MyLibrary
             // 
             // tabAllBooks
             // 
+            this.tabAllBooks.Controls.Add(this.button2);
             this.tabAllBooks.Controls.Add(this.gvAllBooks);
             this.tabAllBooks.Controls.Add(this.btnReserve);
             this.tabAllBooks.Location = new System.Drawing.Point(4, 22);
@@ -147,6 +149,15 @@ namespace MyLibrary
             this.gvMyBooks.Size = new System.Drawing.Size(451, 270);
             this.gvMyBooks.TabIndex = 1;
             // 
+            // btnReturnBook
+            // 
+            this.btnReturnBook.Location = new System.Drawing.Point(6, 270);
+            this.btnReturnBook.Name = "btnReturnBook";
+            this.btnReturnBook.Size = new System.Drawing.Size(75, 23);
+            this.btnReturnBook.TabIndex = 2;
+            this.btnReturnBook.Text = "Vrátiť označené knihy";
+            this.btnReturnBook.UseVisualStyleBackColor = true;
+            // 
             // tabCreateBook
             // 
             this.tabCreateBook.Controls.Add(this.btnBookAdd);
@@ -161,14 +172,47 @@ namespace MyLibrary
             this.tabCreateBook.Text = "Vytvoriť knihu";
             this.tabCreateBook.UseVisualStyleBackColor = true;
             // 
-            // btnReturnBook
+            // btnBookAdd
             // 
-            this.btnReturnBook.Location = new System.Drawing.Point(6, 270);
-            this.btnReturnBook.Name = "btnReturnBook";
-            this.btnReturnBook.Size = new System.Drawing.Size(75, 23);
-            this.btnReturnBook.TabIndex = 2;
-            this.btnReturnBook.Text = "Vrátiť označené knihy";
-            this.btnReturnBook.UseVisualStyleBackColor = true;
+            this.btnBookAdd.Location = new System.Drawing.Point(92, 82);
+            this.btnBookAdd.Name = "btnBookAdd";
+            this.btnBookAdd.Size = new System.Drawing.Size(75, 23);
+            this.btnBookAdd.TabIndex = 4;
+            this.btnBookAdd.Text = "Pridať knihu";
+            this.btnBookAdd.UseVisualStyleBackColor = true;
+            this.btnBookAdd.Click += new System.EventHandler(this.btnBookAdd_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(13, 59);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(32, 13);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Autor";
+            // 
+            // tbAuthor
+            // 
+            this.tbAuthor.Location = new System.Drawing.Point(67, 56);
+            this.tbAuthor.Name = "tbAuthor";
+            this.tbAuthor.Size = new System.Drawing.Size(100, 20);
+            this.tbAuthor.TabIndex = 2;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(13, 33);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(38, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Názov";
+            // 
+            // tbBookName
+            // 
+            this.tbBookName.Location = new System.Drawing.Point(67, 30);
+            this.tbBookName.Name = "tbBookName";
+            this.tbBookName.Size = new System.Drawing.Size(100, 20);
+            this.tbBookName.TabIndex = 0;
             // 
             // button1
             // 
@@ -215,8 +259,8 @@ namespace MyLibrary
             this.súborToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuBtnUsrExport,
             this.menuBtnImport,
-            this.exportKnižniceToolStripMenuItem,
-            this.importKnižniceToolStripMenuItem});
+            this.menubtnExportLib,
+            this.manuBtnImportLib});
             this.súborToolStripMenuItem.Name = "súborToolStripMenuItem";
             this.súborToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
             this.súborToolStripMenuItem.Text = "Súbor";
@@ -236,64 +280,35 @@ namespace MyLibrary
             this.menuBtnImport.Text = "Import používateľov";
             this.menuBtnImport.Click += new System.EventHandler(this.menuBtnImport_Click);
             // 
+            // menubtnExportLib
+            // 
+            this.menubtnExportLib.Name = "menubtnExportLib";
+            this.menubtnExportLib.Size = new System.Drawing.Size(181, 22);
+            this.menubtnExportLib.Text = "Export knižnice";
+            this.menubtnExportLib.Click += new System.EventHandler(this.menuBtnExportLib_Click);
+            // 
+            // manuBtnImportLib
+            // 
+            this.manuBtnImportLib.Name = "manuBtnImportLib";
+            this.manuBtnImportLib.Size = new System.Drawing.Size(181, 22);
+            this.manuBtnImportLib.Text = "Import knižnice";
+            this.manuBtnImportLib.Click += new System.EventHandler(this.manuBtnImportLib_Click);
+            // 
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
             // 
-            // exportKnižniceToolStripMenuItem
+            // button2
             // 
-            this.exportKnižniceToolStripMenuItem.Name = "exportKnižniceToolStripMenuItem";
-            this.exportKnižniceToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.exportKnižniceToolStripMenuItem.Text = "Export knižnice";
-            // 
-            // importKnižniceToolStripMenuItem
-            // 
-            this.importKnižniceToolStripMenuItem.Name = "importKnižniceToolStripMenuItem";
-            this.importKnižniceToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.importKnižniceToolStripMenuItem.Text = "Import knižnice";
-            // 
-            // tbBookName
-            // 
-            this.tbBookName.Location = new System.Drawing.Point(67, 30);
-            this.tbBookName.Name = "tbBookName";
-            this.tbBookName.Size = new System.Drawing.Size(100, 20);
-            this.tbBookName.TabIndex = 0;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 33);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(38, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Názov";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(13, 59);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(32, 13);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Autor";
-            // 
-            // tbAuthor
-            // 
-            this.tbAuthor.Location = new System.Drawing.Point(67, 56);
-            this.tbAuthor.Name = "tbAuthor";
-            this.tbAuthor.Size = new System.Drawing.Size(100, 20);
-            this.tbAuthor.TabIndex = 2;
-            // 
-            // btnBookAdd
-            // 
-            this.btnBookAdd.Location = new System.Drawing.Point(92, 82);
-            this.btnBookAdd.Name = "btnBookAdd";
-            this.btnBookAdd.Size = new System.Drawing.Size(75, 23);
-            this.btnBookAdd.TabIndex = 4;
-            this.btnBookAdd.Text = "Pridať knihu";
-            this.btnBookAdd.UseVisualStyleBackColor = true;
-            this.btnBookAdd.Click += new System.EventHandler(this.btnBookAdd_Click);
+            this.button2.ForeColor = System.Drawing.Color.Chocolate;
+            this.button2.Location = new System.Drawing.Point(203, 267);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(170, 23);
+            this.button2.TabIndex = 7;
+            this.button2.Text = "Odstrániť označené položky";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // MainWindow
             // 
@@ -346,13 +361,14 @@ namespace MyLibrary
         private System.Windows.Forms.ToolStripMenuItem menuBtnUsrExport;
         private System.Windows.Forms.ToolStripMenuItem menuBtnImport;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem exportKnižniceToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem importKnižniceToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem menubtnExportLib;
+        private System.Windows.Forms.ToolStripMenuItem manuBtnImportLib;
         private System.Windows.Forms.Button btnBookAdd;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox tbAuthor;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox tbBookName;
+        private System.Windows.Forms.Button button2;
     }
 }
 

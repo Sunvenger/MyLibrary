@@ -19,14 +19,29 @@ namespace MyLibrary.AppLayer
 
         public void AddBookToSnapshot(Book bookToAdd)
         {
+            int newId = (from b in library.Books select b.Id).Max() + 1;
             cBook newBook = new cBook
             {
+                Id = newId,
                 Name = bookToAdd.Name,
                 Author = bookToAdd.Author,
                 Borrowed = null
             };
 
             library.AddBookToSnapshot(newBook);
+
+        }
+
+        public void RemoveBookFromSnapshot(Book bookToRemove)
+        {
+
+            library.RemoveBook(bookToRemove.Id);
+        }
+
+        public void RemoveBookFromSnapshot(int bookToRemoveId)
+        {
+
+            library.RemoveBook(bookToRemoveId);
         }
 
         public List<Book> GetAllBooks(Users users)
@@ -36,7 +51,12 @@ namespace MyLibrary.AppLayer
  
             foreach (cBook book in library.Books)
             {
-                User borrowed = users.GetUserByName(book.Borrowed.FirstName, book.Borrowed.LastName);
+                User borrowed = null;
+                if (book.Borrowed != null)
+                {
+                     borrowed = users.GetUserByName(book.Borrowed.FirstName, book.Borrowed.LastName);
+                }
+
                 if (borrowed != null)
                 {
                     result.Add(new Book
@@ -74,9 +94,9 @@ namespace MyLibrary.AppLayer
 
 
 
-        internal void RefreshFromFile()
+        internal void LoadSnapshot(string filename = "Library.xml")
         {
-            library = library.RefreshLibFromFile();
+            library = library.LoadSnapshotFromFile(filename);
         }
 
         internal List<Book> GetAvailableBooks(Users users)
@@ -102,6 +122,16 @@ namespace MyLibrary.AppLayer
                       b.Borrowed.LastName == userToVerifyBorrow.LastName
                       select b).ToList();
             return result;
+        }
+
+        internal void SaveSnapshotToFile(string fileName)
+        {
+            library.SaveSnapshotToFile(fileName);
+        }
+
+        internal void RemoveBooksFromSnapshot(List<int> idsToRemove)
+        {
+            library.RemoveBooks(idsToRemove);
         }
     }
 }

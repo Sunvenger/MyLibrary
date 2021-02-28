@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using System.Xml;
+using System.Xml.Linq;
+
 namespace MyLibrary.DataLayer
 {
     [XmlRoot("Library")]
@@ -13,6 +15,7 @@ namespace MyLibrary.DataLayer
     {
         [XmlElement("Book")]
         public List<cBook> Books { get; set; }
+        [XmlIgnore()]
         public StreamProvider LibraryProvider { get; set; }
 
         public cLibrary()
@@ -20,11 +23,13 @@ namespace MyLibrary.DataLayer
             LibraryProvider = new StreamProvider();
         }
 
-        public cLibrary RefreshLibFromFile()
+        public cLibrary LoadSnapshotFromFile(string filename = "Library.xml")
         {
             String rawData;
-            LibraryProvider.LoadStream();
+            LibraryProvider.LoadStream(filename);
             XmlDocument doc = new XmlDocument();
+            LibraryProvider.StreamSnapshot.Position = 0;
+
             doc.Load(LibraryProvider.StreamSnapshot);
             rawData = doc.InnerXml;
             XmlSerializer serializer = new XmlSerializer(typeof(cLibrary));
@@ -45,42 +50,78 @@ namespace MyLibrary.DataLayer
 
         }
 
-        internal void AddBookToSnapshot(cBook newBook)
+        internal void RemoveBook(int id)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(cBook));
-            XmlDocument bookDoc = new XmlDocument();
+
+            List<cBook> newBookList = (from b in Books
+                                       where b.Id != id
+                                       select b).ToList(); // construct new lists without original
+            Books = newBookList; // replacing original Books container
+            var overrides = new XmlAttributeOverrides();
+            var attributes = new XmlAttributes();
+            attributes.XmlIgnore = true;
+            string plainTextXml;
+
             using (var sw = new StringWriter())
             {
-                using (XmlWriter writer = XmlWriter.Create(sw))
-                {
-                    serializer.Serialize(writer, newBook);
-                    bookDoc.LoadXml(sw.ToString());
-                }
-
+                var xs = new XmlSerializer(typeof(cLibrary), overrides);
+                xs.Serialize(sw, this);
+                plainTextXml = sw.ToString();
             }
 
-            var bookNode = bookDoc.SelectSingleNode("//Book");
+
+            XmlDocument newDoc = new XmlDocument();
+            newDoc.LoadXml(plainTextXml);
+            LibraryProvider.StreamSnapshot.Position = 0;
+            newDoc.Save(LibraryProvider.StreamSnapshot);
+            LibraryProvider.StreamSnapshot.Position = 0;
+        }
+
+        internal void AddBookToSnapshot(cBook newBook)
+        {
+            Books.Add(newBook);
+
+            var overrides = new XmlAttributeOverrides();
+            var attributes = new XmlAttributes();
+            attributes.XmlIgnore = true;
+            string plainTextXml;
+            newBook.Borrowed = new cBorrowed
+            {
+                FirstName = "",
+                LastName = "",
+                From = ""
+
+            };
+            using (var sw = new StringWriter())
+            {
+                var xs = new XmlSerializer(typeof(cLibrary), overrides);
+                xs.Serialize(sw, this);
+                plainTextXml = sw.ToString();
+            }
 
             
-            XmlDocument wholeDoc = new XmlDocument();
-
+            XmlDocument newDoc = new XmlDocument(); 
+            newDoc.LoadXml(plainTextXml);
             LibraryProvider.StreamSnapshot.Position = 0;
-            wholeDoc.Load(LibraryProvider.StreamSnapshot);
+            newDoc.Save(LibraryProvider.StreamSnapshot);
             LibraryProvider.StreamSnapshot.Position = 0;
 
-            var bookNodeToInsert = wholeDoc.ImportNode(bookNode, true);
-            wholeDoc.AppendChild(bookNodeToInsert);
+
+
+
+
+
 
 
         }
-        public static cLibrary LoadLibrary()
+        public static cLibrary LoadLibrary(string filename = "Library.xml")
         {
             String rawData;
 
             XmlDocument doc = new XmlDocument();
 
-             
-            doc.Load("Library.xml");
+
+            doc.Load(filename);
             rawData = doc.InnerXml;
             XmlSerializer serializer = new XmlSerializer(typeof(cLibrary));
             try
@@ -97,6 +138,35 @@ namespace MyLibrary.DataLayer
             }
         }
 
+        internal void RemoveBooks(List<int> idsToRemove)
+        {
+            var actualBookIds = (from b in Books
+                                 where !idsToRemove.Contains(b.Id)
+                                 select b.Id).ToList();
+            List<cBook> newBookList = (from b in Books
+                                       where !actualBookIds.Contains(b.Id)
+                                       select b).ToList();
+            Books = newBookList; // replacing original Books container
+            var overrides = new XmlAttributeOverrides();
+            var attributes = new XmlAttributes();
+            attributes.XmlIgnore = true;
+            string plainTextXml;
+
+            using (var sw = new StringWriter())
+            {
+                var xs = new XmlSerializer(typeof(cLibrary), overrides);
+                xs.Serialize(sw, this);
+                plainTextXml = sw.ToString();
+            }
+
+
+            XmlDocument newDoc = new XmlDocument();
+            newDoc.LoadXml(plainTextXml);
+            LibraryProvider.StreamSnapshot.Position = 0;
+            newDoc.Save(LibraryProvider.StreamSnapshot);
+            LibraryProvider.StreamSnapshot.Position = 0;
+        }
+
         internal static void Init()
         {
             using (StreamWriter sw = new StreamWriter("Library.xml"))
@@ -107,6 +177,29 @@ namespace MyLibrary.DataLayer
             }
 
         }
+
+        internal void SaveSnapshotToFile(string fileName)
+        {
+            XmlDocument doc = new XmlDocument();
+            LibraryProvider.StreamSnapshot.Position = 0;
+            doc.Load(LibraryProvider.StreamSnapshot);
+            String rawData;
+            
+            XmlDeclaration xmldecl;
+            xmldecl = doc.CreateXmlDeclaration("1.0", null, null);
+            xmldecl.Encoding = "UTF-8";
+
+            XmlElement root = doc.DocumentElement;
+            doc.ReplaceChild(xmldecl, doc.FirstChild);
+            rawData = doc.InnerXml;
+            using (StreamWriter sr = new StreamWriter(fileName))
+            {
+                sr.Write(rawData);
+            }
+            LibraryProvider.StreamSnapshot.Position = 0;
+        }
+
+
     }
 
 }

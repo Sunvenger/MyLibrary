@@ -21,7 +21,8 @@ namespace MyLibrary.DataLayer
 
         public void LoadStream(string filename = "Library.xml")
         {
-            StreamSnapshot.Position = 0;
+            StreamSnapshot.Seek(0, SeekOrigin.Begin);
+            StreamSnapshot.SetLength(0);
             FileStream libraryFile = new FileStream(filename, FileMode.Open);
             CopyStream(libraryFile, StreamSnapshot);
             libraryFile.Close();

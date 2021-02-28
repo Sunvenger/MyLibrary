@@ -74,6 +74,12 @@ namespace MyLibrary
 
         private void OnLoginSuccesful()
         {
+            RefreshBookTables();
+
+        }
+
+        private void RefreshBookTables()
+        {
             List<pBook> books = null;
             List<pBook> freeBooks = null;
             List<pBook> myBooks = null;
@@ -113,9 +119,6 @@ namespace MyLibrary
                 }
 
             }
-
-
-
         }
 
         private void AllBooksGridClick(object sender, DataGridViewCellEventArgs e)
@@ -163,7 +166,7 @@ namespace MyLibrary
         private void MainWindow_Load(object sender, EventArgs e)
         {
             LibrarySnapshot = new Library();
-            LibrarySnapshot.RefreshFromFile();
+            LibrarySnapshot.LoadSnapshot();
 
             UsersSnapshot = new Users();
             UsersSnapshot.LoadXmlStreamSnapshot();
@@ -187,7 +190,7 @@ namespace MyLibrary
         private void btnGetStream_Click(object sender, EventArgs e)
         {
             LibrarySnapshot = new Library();
-            LibrarySnapshot.RefreshFromFile();
+            LibrarySnapshot.LoadSnapshot();
         }
 
         private void gvAllBooks_Paint(object sender, PaintEventArgs e)
@@ -209,7 +212,7 @@ namespace MyLibrary
             var saveDialog = new SaveFileDialog();
             saveDialog.Filter = "Datový súbor(*.xml)|*.xml";
             saveDialog.ShowDialog();
-
+            if(saveDialog.FileName != "")
             UsersSnapshot.SaveSnapshotToFile(saveDialog.FileName);
 
         }
@@ -219,8 +222,11 @@ namespace MyLibrary
             var openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Datový súbor(*.xml)|*.xml";
             openFileDialog.ShowDialog();
-            UsersSnapshot.LoadXmlStreamSnapshot(openFileDialog.FileName);
-            UsersSnapshot.GetUsers();
+            if (!openFileDialog.CheckFileExists)
+            {
+                UsersSnapshot.LoadXmlStreamSnapshot(openFileDialog.FileName);
+                UsersSnapshot.GetUsers();
+            }
         }
 
         private void btnBookAdd_Click(object sender, EventArgs e)
@@ -235,7 +241,13 @@ namespace MyLibrary
                     Name = tbBookName.Text
 
                 };
+
+                MessageBox.Show("Hotovo");
+                tbAuthor.Text = "";
+                tbBookName.Text = "";
                 LibrarySnapshot.AddBookToSnapshot(newBook);
+                SetUnsavedState();
+                RefreshBookTables();
             }
             else
             {
@@ -244,5 +256,42 @@ namespace MyLibrary
             }
 
         }
+
+        private void menuBtnExportLib_Click(object sender, EventArgs e)
+        {
+            var saveDialog = new SaveFileDialog();
+            saveDialog.Filter = "Datový súbor knižnice(*.xml)|*.xml";
+            saveDialog.ShowDialog();
+            if(saveDialog.FileName!="")
+            LibrarySnapshot.SaveSnapshotToFile(saveDialog.FileName);
+
+        }
+
+        private void manuBtnImportLib_Click(object sender, EventArgs e)
+        {
+            var openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Datový súbor knižnice(*.xml)|*.xml";
+            openFileDialog.ShowDialog();
+            if (!openFileDialog.CheckFileExists)
+            {
+                LibrarySnapshot.LoadSnapshot(openFileDialog.FileName);
+                RefreshBookTables();
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            List<int> idsToRemove = new List<int>();
+            foreach (DataGridViewRow row in gvAllBooks.SelectedRows)
+            {
+                int id = Convert.ToInt32(row.Cells["Id"].Value);
+                //LibrarySnapshot.RemoveBookFromSnapshot(id);
+                idsToRemove.Add(id);
+            }
+
+            LibrarySnapshot.RemoveBooksFromSnapshot(idsToRemove);
+            RefreshBookTables();
+        }
     }
 }
+ 

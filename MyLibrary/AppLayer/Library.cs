@@ -17,7 +17,17 @@ namespace MyLibrary.AppLayer
             library = new cLibrary();
         }
 
+        public void AddBookToSnapshot(Book bookToAdd)
+        {
+            cBook newBook = new cBook
+            {
+                Name = bookToAdd.Name,
+                Author = bookToAdd.Author,
+                Borrowed = null
+            };
 
+            library.AddBookToSnapshot(newBook);
+        }
 
         public List<Book> GetAllBooks(Users users)
         {

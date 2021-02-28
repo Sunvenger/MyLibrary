@@ -50,6 +50,11 @@ namespace MyLibrary
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.exportKnižniceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importKnižniceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tbBookName = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.tbAuthor = new System.Windows.Forms.TextBox();
+            this.btnBookAdd = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabAllBooks.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gvAllBooks)).BeginInit();
@@ -57,6 +62,7 @@ namespace MyLibrary
             ((System.ComponentModel.ISupportInitialize)(this.gvAvailBooks)).BeginInit();
             this.tabMyBooks.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gvMyBooks)).BeginInit();
+            this.tabCreateBook.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -143,6 +149,11 @@ namespace MyLibrary
             // 
             // tabCreateBook
             // 
+            this.tabCreateBook.Controls.Add(this.btnBookAdd);
+            this.tabCreateBook.Controls.Add(this.label2);
+            this.tabCreateBook.Controls.Add(this.tbAuthor);
+            this.tabCreateBook.Controls.Add(this.label1);
+            this.tabCreateBook.Controls.Add(this.tbBookName);
             this.tabCreateBook.Location = new System.Drawing.Point(4, 22);
             this.tabCreateBook.Name = "tabCreateBook";
             this.tabCreateBook.Size = new System.Drawing.Size(649, 296);
@@ -242,6 +253,48 @@ namespace MyLibrary
             this.importKnižniceToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
             this.importKnižniceToolStripMenuItem.Text = "Import knižnice";
             // 
+            // tbBookName
+            // 
+            this.tbBookName.Location = new System.Drawing.Point(67, 30);
+            this.tbBookName.Name = "tbBookName";
+            this.tbBookName.Size = new System.Drawing.Size(100, 20);
+            this.tbBookName.TabIndex = 0;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(13, 33);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(38, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Názov";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(13, 59);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(32, 13);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Autor";
+            // 
+            // tbAuthor
+            // 
+            this.tbAuthor.Location = new System.Drawing.Point(67, 56);
+            this.tbAuthor.Name = "tbAuthor";
+            this.tbAuthor.Size = new System.Drawing.Size(100, 20);
+            this.tbAuthor.TabIndex = 2;
+            // 
+            // btnBookAdd
+            // 
+            this.btnBookAdd.Location = new System.Drawing.Point(92, 82);
+            this.btnBookAdd.Name = "btnBookAdd";
+            this.btnBookAdd.Size = new System.Drawing.Size(75, 23);
+            this.btnBookAdd.TabIndex = 4;
+            this.btnBookAdd.Text = "Pridať knihu";
+            this.btnBookAdd.UseVisualStyleBackColor = true;
+            this.btnBookAdd.Click += new System.EventHandler(this.btnBookAdd_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -264,6 +317,8 @@ namespace MyLibrary
             ((System.ComponentModel.ISupportInitialize)(this.gvAvailBooks)).EndInit();
             this.tabMyBooks.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gvMyBooks)).EndInit();
+            this.tabCreateBook.ResumeLayout(false);
+            this.tabCreateBook.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -293,6 +348,11 @@ namespace MyLibrary
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem exportKnižniceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem importKnižniceToolStripMenuItem;
+        private System.Windows.Forms.Button btnBookAdd;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox tbAuthor;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox tbBookName;
     }
 }
 

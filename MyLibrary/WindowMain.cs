@@ -81,7 +81,7 @@ namespace MyLibrary
 
             try
             {
-                
+
                 books = pBook.GetBooks(LibrarySnapshot, UsersSnapshot);
                 gvAllBooks.AutoGenerateColumns = true;
                 gvAllBooks.DataSource = books;
@@ -200,7 +200,7 @@ namespace MyLibrary
             if (e.RowIndex > 0)
             {
 
-                                
+
             }
         }
 
@@ -209,7 +209,7 @@ namespace MyLibrary
             var saveDialog = new SaveFileDialog();
             saveDialog.Filter = "Datový súbor(*.xml)|*.xml";
             saveDialog.ShowDialog();
-            
+
             UsersSnapshot.SaveSnapshotToFile(saveDialog.FileName);
 
         }
@@ -221,6 +221,28 @@ namespace MyLibrary
             openFileDialog.ShowDialog();
             UsersSnapshot.LoadXmlStreamSnapshot(openFileDialog.FileName);
             UsersSnapshot.GetUsers();
+        }
+
+        private void btnBookAdd_Click(object sender, EventArgs e)
+        {
+
+            if (tbAuthor.Text.Length > 0 && tbBookName.Text.Length > 0)
+            {
+                Book newBook = new Book
+                {
+
+                    Author = tbAuthor.Text,
+                    Name = tbBookName.Text
+
+                };
+                LibrarySnapshot.AddBookToSnapshot(newBook);
+            }
+            else
+            {
+                MessageBox.Show("Všetky polia sú povinné");
+
+            }
+
         }
     }
 }

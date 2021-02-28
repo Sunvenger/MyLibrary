@@ -44,6 +44,35 @@ namespace MyLibrary.DataLayer
             }
 
         }
+
+        internal void AddBookToSnapshot(cBook newBook)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(cBook));
+            XmlDocument bookDoc = new XmlDocument();
+            using (var sw = new StringWriter())
+            {
+                using (XmlWriter writer = XmlWriter.Create(sw))
+                {
+                    serializer.Serialize(writer, newBook);
+                    bookDoc.LoadXml(sw.ToString());
+                }
+
+            }
+
+            var bookNode = bookDoc.SelectSingleNode("//Book");
+
+            
+            XmlDocument wholeDoc = new XmlDocument();
+
+            LibraryProvider.StreamSnapshot.Position = 0;
+            wholeDoc.Load(LibraryProvider.StreamSnapshot);
+            LibraryProvider.StreamSnapshot.Position = 0;
+
+            var bookNodeToInsert = wholeDoc.ImportNode(bookNode, true);
+            wholeDoc.AppendChild(bookNodeToInsert);
+
+
+        }
         public static cLibrary LoadLibrary()
         {
             String rawData;

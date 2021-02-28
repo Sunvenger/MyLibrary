@@ -7,7 +7,7 @@ using System.Xml.Serialization;
 using System.IO;
 namespace MyLibrary.DataLayer
 {
-
+    [XmlRoot("Book")]
     public class cBook
     {
         [XmlAttribute("id")]

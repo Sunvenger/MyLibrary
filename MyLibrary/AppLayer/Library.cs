@@ -20,7 +20,8 @@ namespace MyLibrary.AppLayer
         public void AddBookToSnapshot(Book bookToAdd)
         {
             int newId=1;
-            if(library.Books.Count!=0)
+            bookToAdd.Id = newId;
+            if (library.Books.Count!=0)
             newId = (from b in library.Books select b.Id).Max() + 1;
             cBook newBook = new cBook
             {
@@ -40,7 +41,7 @@ namespace MyLibrary.AppLayer
             library.RemoveBook(bookToRemove.Id);
         }
 
-        internal void EditBook(Book book)
+        public void EditBook(Book book)
         {
             string borrowedTime = "";
             if (book.Borrowed == null)
@@ -136,17 +137,17 @@ namespace MyLibrary.AppLayer
             return result;
         }
 
-        internal static void InitLibrary()
+        public static void InitLibrary()
         {
             cLibrary.Init();
         }
 
-        internal void LoadSnapshot(string filename = "Library.xml")
+        public void LoadSnapshot(string filename = "Library.xml")
         {
             library = library.LoadSnapshotFromFile(filename);
         }
 
-        internal List<Book> GetAvailableBooks(Users users)
+        public List<Book> GetAvailableBooks(Users users)
         {
             var books = GetAllBooks(users);
 
@@ -155,7 +156,7 @@ namespace MyLibrary.AppLayer
             return result.ToList();
         }
 
-        internal List<Book> GetBooksByBorrow(int borrowUserId, Users users)
+        public List<Book> GetBooksByBorrow(int borrowUserId, Users users)
         {
             var books = GetAllBooks(users);
             var result = new List<Book>();
@@ -171,17 +172,17 @@ namespace MyLibrary.AppLayer
             return result;
         }
 
-        internal void SaveSnapshotToFile(string fileName)
+        public void SaveSnapshotToFile(string fileName)
         {
             library.SaveSnapshotToFile(fileName);
         }
 
-        internal void RemoveBooksFromSnapshot(List<int> idsToRemove)
+        public void RemoveBooksFromSnapshot(List<int> idsToRemove)
         {
             library.RemoveBooks(idsToRemove);
         }
 
-        internal void ReturnBook(int id)
+        public void ReturnBook(int id)
         {
             library.ReturnBook(id);
 

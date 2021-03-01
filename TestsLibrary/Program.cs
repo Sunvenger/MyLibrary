@@ -6,7 +6,7 @@ namespace TestsLibrary
     {
         static void Main(string[] args)
         {
-            var users = User.GetUsers();    
+            //var users = User.GetUsers();    
 
             Console.WriteLine("Hello World!");
         }

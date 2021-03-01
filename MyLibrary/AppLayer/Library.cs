@@ -19,7 +19,9 @@ namespace MyLibrary.AppLayer
 
         public void AddBookToSnapshot(Book bookToAdd)
         {
-            int newId = (from b in library.Books select b.Id).Max() + 1;
+            int newId=1;
+            if(library.Books.Count!=0)
+            newId = (from b in library.Books select b.Id).Max() + 1;
             cBook newBook = new cBook
             {
                 Id = newId,
@@ -37,6 +39,31 @@ namespace MyLibrary.AppLayer
 
             library.RemoveBook(bookToRemove.Id);
         }
+
+        internal void EditBook(Book book)
+        {
+            string borrowedTime = "";
+            if (book.Borrowed == null)
+                book.Borrowed = new User();
+
+            if (book.BorrowedFrom != null) borrowedTime = book.BorrowedFrom.ToString();
+
+            cBook newBook = new cBook
+            {
+                Id = book.Id,
+                Author = book.Author,
+                Borrowed = new cBorrowed
+                {
+                    FirstName = book.Borrowed.FirstName,
+                    LastName = book.Borrowed.LastName,
+                    From = borrowedTime
+
+                },
+                Name = book.Name,
+            };
+            library.EditBook(newBook);
+        }
+
         public void BorrowBook(int bookId, User userToAssign) 
         {
 
@@ -109,7 +136,10 @@ namespace MyLibrary.AppLayer
             return result;
         }
 
-
+        internal static void InitLibrary()
+        {
+            cLibrary.Init();
+        }
 
         internal void LoadSnapshot(string filename = "Library.xml")
         {

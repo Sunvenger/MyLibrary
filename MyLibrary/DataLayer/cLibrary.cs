@@ -50,6 +50,15 @@ namespace MyLibrary.DataLayer
 
         }
 
+        internal void EditBook(cBook newBook)
+        {
+            cBook originalBook = (from b in Books where b.Id == newBook.Id select b).First();
+            originalBook.Name = newBook.Name;
+            originalBook.Author = newBook.Author;
+            originalBook.Borrowed = newBook.Borrowed;
+            UpdateSnapshotFromDataLayer();
+        }
+
         internal void BorrowBook(int bookId, string firstName, string lastName, DateTime now)
         {
 
@@ -204,8 +213,8 @@ namespace MyLibrary.DataLayer
             using (StreamWriter sw = new StreamWriter("Library.xml"))
             {
                 sw.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
-                sw.WriteLine("<Users>");
-                sw.WriteLine("</Users>");
+                sw.WriteLine("<Library>");
+                sw.WriteLine("</Library>");
             }
 
         }
@@ -214,7 +223,17 @@ namespace MyLibrary.DataLayer
         {
             XmlDocument doc = new XmlDocument();
             LibraryProvider.StreamSnapshot.Position = 0;
+            try {
             doc.Load(LibraryProvider.StreamSnapshot);
+            }
+            catch 
+            {
+                using (StreamWriter sr = new StreamWriter("Invalid_"+fileName))
+                {
+                    sr.Write(LibraryProvider.StreamSnapshot);
+                }
+                throw new IOException();
+            }
             String rawData;
             
             XmlDeclaration xmldecl;

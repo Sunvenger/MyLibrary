@@ -32,9 +32,11 @@ namespace MyLibrary
             this.components = new System.ComponentModel.Container();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabAllBooks = new System.Windows.Forms.TabPage();
+            this.button2 = new System.Windows.Forms.Button();
             this.gvAllBooks = new System.Windows.Forms.DataGridView();
             this.tabAvailBooks = new System.Windows.Forms.TabPage();
             this.gvAvailBooks = new System.Windows.Forms.DataGridView();
+            this.btnReserveBook = new System.Windows.Forms.Button();
             this.tabMyBooks = new System.Windows.Forms.TabPage();
             this.gvMyBooks = new System.Windows.Forms.DataGridView();
             this.btnReturnBook = new System.Windows.Forms.Button();
@@ -44,7 +46,6 @@ namespace MyLibrary
             this.tbAuthor = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tbBookName = new System.Windows.Forms.TextBox();
-            this.btnReserveBook = new System.Windows.Forms.Button();
             this.btnLogOut = new System.Windows.Forms.Button();
             this.btnGetStream = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -54,7 +55,7 @@ namespace MyLibrary
             this.menubtnExportLib = new System.Windows.Forms.ToolStripMenuItem();
             this.manuBtnImportLib = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.button2 = new System.Windows.Forms.Button();
+            this.btnEditBooks = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabAllBooks.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gvAllBooks)).BeginInit();
@@ -80,6 +81,7 @@ namespace MyLibrary
             // 
             // tabAllBooks
             // 
+            this.tabAllBooks.Controls.Add(this.btnEditBooks);
             this.tabAllBooks.Controls.Add(this.button2);
             this.tabAllBooks.Controls.Add(this.gvAllBooks);
             this.tabAllBooks.Location = new System.Drawing.Point(4, 22);
@@ -90,6 +92,17 @@ namespace MyLibrary
             this.tabAllBooks.Text = "Všetky knihy";
             this.tabAllBooks.UseVisualStyleBackColor = true;
             // 
+            // button2
+            // 
+            this.button2.ForeColor = System.Drawing.Color.Chocolate;
+            this.button2.Location = new System.Drawing.Point(6, 267);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(170, 23);
+            this.button2.TabIndex = 7;
+            this.button2.Text = "Odstrániť označené položky";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
             // gvAllBooks
             // 
             this.gvAllBooks.AllowUserToAddRows = false;
@@ -97,6 +110,7 @@ namespace MyLibrary
             this.gvAllBooks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gvAllBooks.Location = new System.Drawing.Point(6, 3);
             this.gvAllBooks.Name = "gvAllBooks";
+            this.gvAllBooks.ReadOnly = true;
             this.gvAllBooks.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.gvAllBooks.Size = new System.Drawing.Size(637, 258);
             this.gvAllBooks.TabIndex = 0;
@@ -121,9 +135,20 @@ namespace MyLibrary
             this.gvAvailBooks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gvAvailBooks.Location = new System.Drawing.Point(6, 3);
             this.gvAvailBooks.Name = "gvAvailBooks";
+            this.gvAvailBooks.ReadOnly = true;
             this.gvAvailBooks.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.gvAvailBooks.Size = new System.Drawing.Size(637, 279);
             this.gvAvailBooks.TabIndex = 1;
+            // 
+            // btnReserveBook
+            // 
+            this.btnReserveBook.Location = new System.Drawing.Point(18, 283);
+            this.btnReserveBook.Name = "btnReserveBook";
+            this.btnReserveBook.Size = new System.Drawing.Size(75, 23);
+            this.btnReserveBook.TabIndex = 3;
+            this.btnReserveBook.Text = "Rezervovať knihu";
+            this.btnReserveBook.UseVisualStyleBackColor = true;
+            this.btnReserveBook.Click += new System.EventHandler(this.btnReserveBook_Click);
             // 
             // tabMyBooks
             // 
@@ -143,9 +168,11 @@ namespace MyLibrary
             this.gvMyBooks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gvMyBooks.Location = new System.Drawing.Point(6, 3);
             this.gvMyBooks.Name = "gvMyBooks";
+            this.gvMyBooks.ReadOnly = true;
             this.gvMyBooks.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.gvMyBooks.Size = new System.Drawing.Size(640, 270);
             this.gvMyBooks.TabIndex = 1;
+            this.gvMyBooks.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gvMyBooks_CellContentClick);
             // 
             // btnReturnBook
             // 
@@ -166,7 +193,7 @@ namespace MyLibrary
             this.tabCreateBook.Controls.Add(this.tbBookName);
             this.tabCreateBook.Location = new System.Drawing.Point(4, 22);
             this.tabCreateBook.Name = "tabCreateBook";
-            this.tabCreateBook.Size = new System.Drawing.Size(649, 296);
+            this.tabCreateBook.Size = new System.Drawing.Size(649, 309);
             this.tabCreateBook.TabIndex = 3;
             this.tabCreateBook.Text = "Vytvoriť knihu";
             this.tabCreateBook.UseVisualStyleBackColor = true;
@@ -212,16 +239,6 @@ namespace MyLibrary
             this.tbBookName.Name = "tbBookName";
             this.tbBookName.Size = new System.Drawing.Size(100, 20);
             this.tbBookName.TabIndex = 0;
-            // 
-            // btnReserveBook
-            // 
-            this.btnReserveBook.Location = new System.Drawing.Point(18, 283);
-            this.btnReserveBook.Name = "btnReserveBook";
-            this.btnReserveBook.Size = new System.Drawing.Size(75, 23);
-            this.btnReserveBook.TabIndex = 3;
-            this.btnReserveBook.Text = "Rezervovať knihu";
-            this.btnReserveBook.UseVisualStyleBackColor = true;
-            this.btnReserveBook.Click += new System.EventHandler(this.btnReserveBook_Click);
             // 
             // btnLogOut
             // 
@@ -299,16 +316,15 @@ namespace MyLibrary
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
             // 
-            // button2
+            // btnEditBooks
             // 
-            this.button2.ForeColor = System.Drawing.Color.Chocolate;
-            this.button2.Location = new System.Drawing.Point(6, 267);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(170, 23);
-            this.button2.TabIndex = 7;
-            this.button2.Text = "Odstrániť označené položky";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.btnEditBooks.Location = new System.Drawing.Point(210, 266);
+            this.btnEditBooks.Name = "btnEditBooks";
+            this.btnEditBooks.Size = new System.Drawing.Size(141, 23);
+            this.btnEditBooks.TabIndex = 8;
+            this.btnEditBooks.Text = "Editovať Položky";
+            this.btnEditBooks.UseVisualStyleBackColor = true;
+            this.btnEditBooks.Click += new System.EventHandler(this.btnEditBooks_Click);
             // 
             // MainWindow
             // 
@@ -367,6 +383,7 @@ namespace MyLibrary
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox tbBookName;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnEditBooks;
     }
 }
 

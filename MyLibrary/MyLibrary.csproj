@@ -65,6 +65,12 @@
     <Compile Include="DataLayer\cUsers.cs" />
     <Compile Include="DataLayer\StreamProvider.cs" />
     <Compile Include="PresentationLayer\pBook.cs" />
+    <Compile Include="WindowEditBook.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WindowEditBook.Designer.cs">
+      <DependentUpon>WindowEditBook.cs</DependentUpon>
+    </Compile>
     <Compile Include="WindowMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -85,6 +91,9 @@
     <Compile Include="WindowRegistration.Designer.cs">
       <DependentUpon>WindowRegistration.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="WindowEditBook.resx">
+      <DependentUpon>WindowEditBook.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="WindowMain.resx">
       <DependentUpon>WindowMain.cs</DependentUpon>
     </EmbeddedResource>

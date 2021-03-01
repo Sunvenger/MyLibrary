@@ -17,12 +17,15 @@ namespace MyLibrary.PresentationLayer
         public static List<pBook> GetBooks(Library lib, Users users)
         {
             var books = lib.GetAllBooks(users);
+            return GetBookByList(books);
 
+        }
 
+        internal static List<pBook> GetBookByList(List<Book> books)
+        {
             List<pBook> result = new List<pBook>();
             foreach (Book book in books)
             {
-
                 string požičané;
                 if (book.Borrowed != null)
                     požičané = $"{book.Borrowed.FirstName} {book.Borrowed.LastName}";
@@ -39,32 +42,12 @@ namespace MyLibrary.PresentationLayer
                         owner = book.Borrowed,
                         PožičanéOd = book.BorrowedFrom.ToString(),
                     }
-                ) ;
-            }
-            return result;
-
-        }
-        /*
-        public static List<pBook> GetBooks()
-        {
-            var books = lib.GetAllBooks();
-            List<pBook> result = new List<pBook>();
-            foreach (Book book in books)
-            {
-                string požičané = $"{book.Borrowed.FirstName} {book.Borrowed.LastName}";
-                result.Add(
-                    new pBook
-                    {
-                        Id = book.Id,
-                        Názov = book.Name,
-                        Autor = book.Author,
-                        Požičané = požičané,
-                    }
                 );
             }
             return result;
+        }
 
-        }*/
+  
         public static List<pBook> GetAvailableBooks(Library lib, Users users)
         {
             

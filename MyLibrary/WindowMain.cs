@@ -16,6 +16,7 @@ namespace MyLibrary
     public partial class MainWindow : Form
     {
         WindowLogin loginDialog;
+        WindowEditBook bookEditor;
         User CurrentUser { get; set; }
         Users UsersSnapshot { get; set; }
         public Library LibrarySnapshot { get; set; }
@@ -166,10 +167,37 @@ namespace MyLibrary
         private void MainWindow_Load(object sender, EventArgs e)
         {
             LibrarySnapshot = new Library();
-            LibrarySnapshot.LoadSnapshot();
+            try
+            {
+                LibrarySnapshot.LoadSnapshot();
 
+            }
+            catch
+            {
+                var res = MessageBox.Show("Nepodarilo sa načítať knižnicu Library.xml prajete si založiť novú?", "Chyba", MessageBoxButtons.YesNo);
+                if(res == DialogResult.Yes)
+                {
+                    Library.InitLibrary();
+                    LibrarySnapshot.LoadSnapshot();
+                }
+                else Application.Exit();
+            }
             UsersSnapshot = new Users();
-            UsersSnapshot.LoadXmlStreamSnapshot();
+            try
+            {
+                UsersSnapshot.LoadXmlStreamSnapshot();
+            }
+            catch 
+            {
+                var res = MessageBox.Show("Nepodarilo sa načítať Zoznam používateľov Users.xml prajete si založiť nový?", "Chyba", MessageBoxButtons.YesNo);
+                if (res == DialogResult.Yes)
+                {
+                    Users.InitUsers();
+                    UsersSnapshot.LoadXmlStreamSnapshot();
+
+                }
+                else Application.Exit();
+            }
             UsersSnapshot.GetUsers();
 
         }
@@ -212,8 +240,8 @@ namespace MyLibrary
             var saveDialog = new SaveFileDialog();
             saveDialog.Filter = "Datový súbor(*.xml)|*.xml";
             saveDialog.ShowDialog();
-            if(saveDialog.FileName != "")
-            UsersSnapshot.SaveSnapshotToFile(saveDialog.FileName);
+            if (saveDialog.FileName != "")
+                UsersSnapshot.SaveSnapshotToFile(saveDialog.FileName);
 
         }
 
@@ -263,8 +291,8 @@ namespace MyLibrary
             var saveDialog = new SaveFileDialog();
             saveDialog.Filter = "Datový súbor knižnice(*.xml)|*.xml";
             saveDialog.ShowDialog();
-            if(saveDialog.FileName!="")
-            LibrarySnapshot.SaveSnapshotToFile(saveDialog.FileName);
+            if (saveDialog.FileName != "")
+                LibrarySnapshot.SaveSnapshotToFile(saveDialog.FileName);
 
         }
 
@@ -273,7 +301,7 @@ namespace MyLibrary
             var openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Datový súbor knižnice(*.xml)|*.xml";
             openFileDialog.ShowDialog();
-            if (openFileDialog.FileName!="")
+            if (openFileDialog.FileName != "")
             {
                 LibrarySnapshot.LoadSnapshot(openFileDialog.FileName);
                 RefreshBookTables();
@@ -317,6 +345,33 @@ namespace MyLibrary
 
 
         }
+
+        private void btnEditBooks_Click(object sender, EventArgs e)
+        {
+            List<int> booksIds = new List<int>();
+            foreach (DataGridViewRow row in gvAllBooks.SelectedRows)
+            {
+                int id = Convert.ToInt32(row.Cells["Id"].Value);
+                booksIds.Add(id);
+            }
+            var books = LibrarySnapshot.GetAllBooks(UsersSnapshot);
+
+            List<Book> selectedBooks = (from b in books where booksIds.Contains(b.Id) select b).ToList();
+
+
+            bookEditor = new WindowEditBook
+            {
+                LibrarySnapshot = LibrarySnapshot,
+                Books = selectedBooks
+            };
+            bookEditor.ShowDialog();
+            SetUnsavedState();
+            RefreshBookTables();
+        }
+
+        private void gvMyBooks_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }
- 

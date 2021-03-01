@@ -109,6 +109,17 @@ namespace MyLibrary.DataLayer
             
 
         }
+
+        internal static void Init()
+        {
+            using (StreamWriter sw = new StreamWriter("Users.xml"))
+            {
+                sw.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+                sw.WriteLine("<Users>");
+                sw.WriteLine("</Users>");
+            }
+        }
+
         public void AddUser(cUser newUser)
         {
             var users = Users;

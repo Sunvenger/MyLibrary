@@ -100,10 +100,9 @@ namespace MyLibrary.AppLayer
 
         }
 
-
-
-
-
-
+        internal static void InitUsers()
+        {
+            cUsers.Init();
+        }
     }
 }

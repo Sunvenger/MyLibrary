@@ -175,7 +175,7 @@ namespace MyLibrary
             catch
             {
                 var res = MessageBox.Show("Nepodarilo sa načítať knižnicu Library.xml prajete si založiť novú?", "Chyba", MessageBoxButtons.YesNo);
-                if(res == DialogResult.Yes)
+                if (res == DialogResult.Yes)
                 {
                     Library.InitLibrary();
                     LibrarySnapshot.LoadSnapshot();
@@ -187,7 +187,7 @@ namespace MyLibrary
             {
                 UsersSnapshot.LoadXmlStreamSnapshot();
             }
-            catch 
+            catch
             {
                 var res = MessageBox.Show("Nepodarilo sa načítať Zoznam používateľov Users.xml prajete si založiť nový?", "Chyba", MessageBoxButtons.YesNo);
                 if (res == DialogResult.Yes)
@@ -251,10 +251,17 @@ namespace MyLibrary
             openFileDialog.Filter = "Datový súbor(*.xml)|*.xml";
             openFileDialog.ShowDialog();
             if (openFileDialog.FileName != "")
-            {
-                UsersSnapshot.LoadXmlStreamSnapshot(openFileDialog.FileName);
-                UsersSnapshot.GetUsers();
-            }
+                try
+                {
+                    UsersSnapshot.LoadXmlStreamSnapshot(openFileDialog.FileName); // load users from file to snapshot memory
+                    UsersSnapshot.GetUsers();
+                }
+                catch
+                {
+                    MessageBox.Show("Nebolo možné načítať súbor");
+                }
+
+
             RefreshBookTables();
         }
 
@@ -292,7 +299,7 @@ namespace MyLibrary
             saveDialog.Filter = "Datový súbor knižnice(*.xml)|*.xml";
             saveDialog.ShowDialog();
             if (saveDialog.FileName != "")
-                LibrarySnapshot.SaveSnapshotToFile(saveDialog.FileName);
+                LibrarySnapshot.SaveSnapshotToFile(saveDialog.FileName);// save library from snapshot to file 
 
         }
 
@@ -301,26 +308,21 @@ namespace MyLibrary
             var openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Datový súbor knižnice(*.xml)|*.xml";
             openFileDialog.ShowDialog();
-            if (openFileDialog.FileName != "")
+            if (openFileDialog.FileName != "")//basic file presence protection
             {
-                LibrarySnapshot.LoadSnapshot(openFileDialog.FileName);
+                try
+                {
+                    LibrarySnapshot.LoadSnapshot(openFileDialog.FileName);
+                }
+                catch
+                {
+                    MessageBox.Show("Nebolo možné načítať súbor");
+                }
                 RefreshBookTables();
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            List<int> idsToRemove = new List<int>();
-            foreach (DataGridViewRow row in gvAllBooks.SelectedRows)
-            {
-                int id = Convert.ToInt32(row.Cells["Id"].Value);
-                //LibrarySnapshot.RemoveBookFromSnapshot(id);
-                idsToRemove.Add(id);
-            }
 
-            LibrarySnapshot.RemoveBooksFromSnapshot(idsToRemove);
-            RefreshBookTables();
-        }
 
         private void btnReserveBook_Click(object sender, EventArgs e)
         {
@@ -348,7 +350,7 @@ namespace MyLibrary
 
         private void btnEditBooks_Click(object sender, EventArgs e)
         {
-            List<int> booksIds = new List<int>();
+            List<int> booksIds = new List<int>();//extract Identifiers 
             foreach (DataGridViewRow row in gvAllBooks.SelectedRows)
             {
                 int id = Convert.ToInt32(row.Cells["Id"].Value);
@@ -372,6 +374,20 @@ namespace MyLibrary
         private void gvMyBooks_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        private void btnDeleteBooks_Click(object sender, EventArgs e)
+        {
+            List<int> idsToRemove = new List<int>();
+            foreach (DataGridViewRow row in gvAllBooks.SelectedRows)
+            {
+                int id = Convert.ToInt32(row.Cells["Id"].Value);
+                //LibrarySnapshot.RemoveBookFromSnapshot(id);
+                idsToRemove.Add(id);
+            }
+
+            LibrarySnapshot.RemoveBooksFromSnapshot(idsToRemove);
+            RefreshBookTables();
         }
     }
 }

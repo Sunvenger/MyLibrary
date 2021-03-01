@@ -103,6 +103,7 @@ namespace MyLibrary.DataLayer
 
             XmlDocument newDoc = new XmlDocument();
             newDoc.LoadXml(plainTextXml);
+            LibraryProvider.StreamSnapshot = new MemoryStream();
             LibraryProvider.StreamSnapshot.Position = 0;
             newDoc.Save(LibraryProvider.StreamSnapshot);
             LibraryProvider.StreamSnapshot.Position = 0;
@@ -133,6 +134,7 @@ namespace MyLibrary.DataLayer
             
             XmlDocument newDoc = new XmlDocument(); 
             newDoc.LoadXml(plainTextXml);
+            LibraryProvider.StreamSnapshot = new MemoryStream();
             LibraryProvider.StreamSnapshot.Position = 0;
             newDoc.Save(LibraryProvider.StreamSnapshot);
             LibraryProvider.StreamSnapshot.Position = 0;
@@ -185,7 +187,7 @@ namespace MyLibrary.DataLayer
                                  where !idsToRemove.Contains(b.Id)
                                  select b.Id).ToList();
             List<cBook> newBookList = (from b in Books
-                                       where !actualBookIds.Contains(b.Id)
+                                       where actualBookIds.Contains(b.Id)
                                        select b).ToList();
             Books = newBookList; // replacing original Books container
             var overrides = new XmlAttributeOverrides();
@@ -204,6 +206,7 @@ namespace MyLibrary.DataLayer
             XmlDocument newDoc = new XmlDocument();
             newDoc.LoadXml(plainTextXml);
             LibraryProvider.StreamSnapshot.Position = 0;
+            LibraryProvider.StreamSnapshot = new MemoryStream();
             newDoc.Save(LibraryProvider.StreamSnapshot);
             LibraryProvider.StreamSnapshot.Position = 0;
         }
@@ -223,10 +226,11 @@ namespace MyLibrary.DataLayer
         {
             XmlDocument doc = new XmlDocument();
             LibraryProvider.StreamSnapshot.Position = 0;
+
             try {
             doc.Load(LibraryProvider.StreamSnapshot);
             }
-            catch 
+            catch (Exception e)
             {
                 using (StreamWriter sr = new StreamWriter("Invalid_"+fileName))
                 {
